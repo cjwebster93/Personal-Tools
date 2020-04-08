@@ -1,8 +1,26 @@
 ﻿#Custom script to set student password according to a coded template. Adjust as necessary.
 
-Start-Transcript -Path 'C:\AgileICT\Logs\StudentPasswords.txt'
+#Get AD group we want to reset passwords on, also used for logging file name
+$ADGroup = Read-Host -Prompt "What AD group will we be working on?"
 
-$userlist = Get-ADGroupMember 'students'
+#Start transcript with identifiable log name
+$Path = Get-Location
+$LogPath = ("$Path\$ADGroup" + '_Passwords.log')
+Write-Host('Transcript log file will be: ' + $LogPath)
+$CSVPath = ("$Path\$ADGroup" + '_Passwords.csv')
+Write-Host('Output CSV File will be: ' + $CSVPath)
+Start-Transcript -Path ($LogPath)
+
+#Guess DFE from Agile-style domain name
+$DFE = Get-CurrentUserDomain.substring(2,4)
+Write-Host ('School DFE is ' + $DFE)
+$ManDFE = Read-Host -'Prompt Is the DFE correct? If not, enter it now (else, leave blank)'
+if ($ManDFE) {
+    $DFE = $ManDFE
+    Write-Host ('DFE set to ' + $DFE)
+}
+
+$userlist = Get-ADGroupMember $ADGroup
 Foreach($user in $userlist) {
     
     $userinfo = Get-AdUser $user.SamAccountName -Properties GivenName, Surname  
@@ -15,7 +33,7 @@ Foreach($user in $userlist) {
     #Write-Host($SurInit)
 
     #Build password
-    $Password  = "Midhurst" + $GivenInit + $SurInit +"!"
+    $Password  = $DFE + $GivenInit + $SurInit +"!"
     Write-Host('Generated password for ' + $user.name + ' is ' + $Password)
 
     #Set password
@@ -28,7 +46,7 @@ Foreach($user in $userlist) {
     $CSVContent | Add-Member -MemberType NoteProperty -Name Username -Value $userinfo.SamAccountName
     $CSVContent | Add-Member -MemberType NoteProperty -Name Password -Value $Password
 
-    Export-Csv -InputObject $CSVContent -Path 'C:\AgileICT\Logs\StudentPasswords.csv' -Append -NoTypeInformation
+    Export-Csv -InputObject $CSVContent -Path ($Path + '\' + $ADGroup + '_Passwords.csv') -Append -NoTypeInformation
     }
 
 Stop-Transcript
