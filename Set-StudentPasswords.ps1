@@ -9,7 +9,7 @@ $LogPath = ("$Path\$ADGroup" + '_Passwords.log')
 Write-Host('Transcript log file will be: ' + $LogPath)
 $CSVPath = ("$Path\$ADGroup" + '_Passwords.csv')
 Write-Host('Output CSV File will be: ' + $CSVPath)
-Start-Transcript -Path ($LogPath)
+Start-Transcript -Path $LogPath
 
 #Guess DFE from Agile-style domain name
 $DFE = Get-CurrentUserDomain.substring(2,4)
@@ -46,7 +46,7 @@ Foreach($user in $userlist) {
     $CSVContent | Add-Member -MemberType NoteProperty -Name Username -Value $userinfo.SamAccountName
     $CSVContent | Add-Member -MemberType NoteProperty -Name Password -Value $Password
 
-    Export-Csv -InputObject $CSVContent -Path ($Path + '\' + $ADGroup + '_Passwords.csv') -Append -NoTypeInformation
+    Export-Csv -InputObject $CSVContent -Path $CSVPath -Append -NoTypeInformation
     }
 
 Stop-Transcript
