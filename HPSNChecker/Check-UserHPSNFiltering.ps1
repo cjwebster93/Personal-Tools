@@ -1,7 +1,5 @@
 #Checks user AD information for compatibility with HPSN Smoothwall filtering
 
-$user = Read-Host -Prompt 'Which user do we need to check? Enter their username'
-
 #Get Domain
 $domain = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain();
 $dcs    = $domain -Split "\@";
@@ -14,10 +12,21 @@ if ($Verify -eq 'N') {
     }
 }
 
-#Loop to be inserted here to handle a user list
+#Loop to be inserted here to handle user lists
 
 #Get the user information, particularly UPN and Group Memberships
-$userinfo = Get-ADUser -Identity $user -Properties UserPrincipalName, MemberOf;
+$userinfo = $null
+
+While (!$userinfo) {
+    #This will be removed when user input is automated...
+    $user = Read-Host -Prompt 'Which user do we need to check? Enter their username'.ToLower()
+    
+    try {
+        $userinfo = Get-ADUser -Identity $user -Properties UserPrincipalName, MemberOf;
+    } catch {
+        Write-Host("User not found.")
+    }
+}
 
 #Check UPN
 $UPNcheck = ($userinfo.SamAccountName + "@$dcs")
@@ -28,3 +37,5 @@ if ($userinfo.UserPrincipalName -cnotmatch $UPNcheck) {
 } else {
     Write-Host('UserPricipalName is correct!')
 }
+
+#Check user groups
