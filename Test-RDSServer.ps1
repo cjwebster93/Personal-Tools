@@ -17,7 +17,7 @@ else
 }
 
 #Inform the user whether or not the TCP test was a success
-If ($Result.TcpTestSucceeded -eq $true) 
+If ($Result -eq $true) 
 {
     Write-Host "Connection Successful!"
 }
