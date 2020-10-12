@@ -3,7 +3,7 @@ $RootFilePath = "C:\AgileICT\UPNCheck"
 
 #Logging
 #$LogRootPath = Get-Location
-$LogPath = ("$RootFilePath\" + 'UPNCheck.log')
+$LogPath = ("$RootFilePath\" + $env:USERDOMAIN + '_UPNCheck.log')
 Write-Host('Transcript log file will be: ' + $LogPath)
 Start-Transcript -Path $LogPath -Append
 
