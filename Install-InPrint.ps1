@@ -1,4 +1,4 @@
-#Start transcript with identifiable log name
+#Start transcript with identifiable log name.
 $Path = Get-Location
 $LogPath = ("$Path\" + 'InPrintInstall.log')
 Write-Host('Transcript log file will be: ' + $LogPath)
