@@ -1,10 +1,10 @@
-:: Script to connect shared and personal drives. Written for use at on standalone machines - Craig Webster
+REM Script to connect shared and personal drives. Written for use at on standalone machines - Craig Webster
 @echo off
-:: Set DC server IP (Change as required)
+REM Set DC server IP (Change as required)
 set server_ip=172.21.174.16
 echo Server IP set is %server_ip%
 
-:: Attach drives
+REM Attach drives
 echo Set Drive Name...
 reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\MountPoints2\##%server_ip%#staffhomes$#%username%#documents /v _LabelFromReg /t REG_SZ /f /d "My Documents"
 echo Connect Drive...

@@ -5,7 +5,7 @@ param(
     [Parameter(Position=0)]
     [string]$ServerIP=$env:LOGONSERVER
 )
-
+$ServerIP=$ServerIP.split("\\")
 #Config
 $Drives=@(("teares$","Teachers Resources","T"),("officeres$","Office Resources","O"))
 $regpath="HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\MountPoints2"
