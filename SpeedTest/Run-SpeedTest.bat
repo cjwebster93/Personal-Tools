@@ -1,0 +1,1 @@
+start iperf.exe -c 10.197.176.7 -i 1 -t 60
