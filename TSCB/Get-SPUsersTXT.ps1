@@ -1,5 +1,6 @@
 
-
+Import-Module Microsoft.Online.SharePoint.PowerShell
+Import-Module PnP.PowerShell
 
 
 
