@@ -7,7 +7,7 @@ echo "Reinstalling Datto RMM Agent on %COMPUTERNAME%..." >> %Logfile%
 REM Uninstall Datto RMM Agent
 echo "Uninstalling Datto RMM Agent..." >> %Logfile%
 Call "C:\Program Files (x86)\CentraStage\uninst.exe" 
-pause
+timeout 10
 echo "Uninstalled Datto RMM Agent!" >> %Logfile%
 
 REM Remove all directories as described https://rmm.datto.com/help/en/Content/4WEBPORTAL/Devices/ServersLaptopsDesktops/Windows/InstallWindows.htm
