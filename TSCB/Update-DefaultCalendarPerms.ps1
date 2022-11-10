@@ -1,4 +1,11 @@
-#Logging
+[CmdletBinding()]
+param (
+    [Parameter()]
+    [string]
+    $AccessRights = 'AvailabilityOnly'
+)
+
+
 #Logging
 $LogRootPath = Get-Location
 $LogPath = ("$LogRootPath\" + $LogName)
@@ -17,7 +24,7 @@ Try {
 Write-Host ("Connecting to Exchange Online")
 Connect-ExchangeOnline
 
-#Get user calendars where Default user permission is NOT equal to "AvailabilityOnly"
+#Get user calendars where Default user permission is NOT equal to $AccessRights variable
 
 $allMailboxes = Get-User -RecipientTypeDetails UserMailbox
 
@@ -26,7 +33,7 @@ foreach ($user in $allMailboxes) {
     Write-Host ("Updating Default calendar permission for $name...")
     $cal = $user.Name+":\Calendar"
     try {
-        Set-MailboxFolderPermission -Identity $cal -User Default -AccessRights AvailabilityOnly
+        Set-MailboxFolderPermission -Identity $cal -User Default -AccessRights $AccessRights
         Write-Host -ForegroundColor Green ("Updated Default permissions successfully!")
     } catch {
         Write-Host -ForegroundColor Red ("Error updating permissions for $name!")
