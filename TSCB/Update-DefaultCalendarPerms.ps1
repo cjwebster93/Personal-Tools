@@ -7,6 +7,7 @@ param (
 
 
 #Logging
+$LogName = "CalendarPerms.log"
 $LogRootPath = Get-Location
 $LogPath = ("$LogRootPath\" + $LogName)
 Write-Host('Transcript log file will be: ' + $LogPath)
