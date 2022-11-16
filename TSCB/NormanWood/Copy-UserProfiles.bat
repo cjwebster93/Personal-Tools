@@ -1,0 +1,1 @@
+robocopy \\FILESERVER\Profiles$ "D:\ServerFolders\User Profiles" /z /e /mir /copyall /log:copyLog.txt

@@ -1,0 +1,1 @@
+robocopy "\\FILESERVER\Client Computer Backups" "D:\ServerFolders\Client Computer Backups" /z /e /mir /copyall /log:copyLog.txt

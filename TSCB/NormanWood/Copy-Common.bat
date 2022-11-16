@@ -1,0 +1,1 @@
+robocopy \\FILESERVER\Gorsewood D:\ServerFolders\Gorsewood /z /e /mir /copyall /log:copyLog.txt
