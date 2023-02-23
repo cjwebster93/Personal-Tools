@@ -1,0 +1,9 @@
+@echo off
+echo Removing existing mapped drive connections...
+net use * /delete
+echo Mapping Gorsewood drive...
+net use M: \\192.168.1.5\Gorsewood
+echo Mapping Common drive...
+net use R: \\192\168.1.5\Common
+echo Drives reconnected!
+pause
