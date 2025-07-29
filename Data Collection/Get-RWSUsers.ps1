@@ -1,0 +1,1 @@
+﻿Get-ADGroup -Filter {name -like "RWSAuth*"} | Get-ADGroupMember | Select Name | Sort Name | Export-CSV -Path C:\Groupmembers.csv -NoTypeInformation
