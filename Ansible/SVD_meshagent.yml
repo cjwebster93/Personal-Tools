@@ -1,0 +1,24 @@
+---
+- name: Run meshagent install script on remote devices
+  hosts: x260s:x230s
+  order: sorted
+  become: yes
+  tasks:
+    - name: Check if Mesh agent is already installed
+      stat:
+        path: /usr/local/mesh_services
+      register: meshagent_installed
+
+    - name: Debug the Mesh agent installation status
+      debug:
+        msg: "Mesh agent is already installed."
+      when: meshagent_installed.stat.exists
+
+    - name: Download and run mesh install script
+      shell: |
+        (wget "https://mc.blueloop.net/meshagents?script=1" -O ./meshinstall.sh || wget "https://mc.blueloop.net/meshagents?script=1" --no-proxy -O ./meshinstall.sh) \
+        && chmod 755 ./meshinstall.sh \
+        && ./meshinstall.sh https://mc.blueloop.net 'kqUimnwK@VItH4Q@6toQjr3AalWqQ73pcPxdXXf0f9ZbEy$nZwd78aa3b1DwtSSy' \
+        || ./meshinstall.sh https://mc.blueloop.net 'kqUimnwK@VItH4Q@6toQjr3AalWqQ73pcPxdXXf0f9ZbEy$nZwd78aa3b1DwtSSy'
+      when: not meshagent_installed.stat.exists
+...
