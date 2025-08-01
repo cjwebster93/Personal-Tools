@@ -1,0 +1,21 @@
+services:
+    mumble-server:
+        image: mumblevoip/mumble-server:latest
+        container_name: mumble-server
+        hostname: mumble-server
+        restart: on-failure
+        ports:
+            - 64738:64738
+            - 64738:64738/udp
+        volumes:
+            - mumble_data:/data
+        environment:
+            - MUMBLE_SUPERUSER_PASSWORD=Pr0digyAdm1n
+#            - MUMBLE_CONFIG_SERVER_PASSWORD=Letmein
+            - MUMBLE_CONFIG_registerName="Prodigy Mumble Server"
+            
+#       expose:
+#           - 6502
+
+volumes:
+  mumble_data:

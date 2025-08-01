@@ -1,0 +1,22 @@
+services:
+  dumbdrop:
+    image: dumbwareio/dumbdrop:latest
+    ports:
+      - 3000:3000
+    volumes:
+      # Where your uploaded files will land
+      - ./uploads:/app/uploads
+    environment:
+      # Explicitly set upload directory inside the container
+      UPLOAD_DIR: /app/uploads
+      # The title shown in the web interface
+      DUMBDROP_TITLE: DumbDrop
+      # Maximum file size in MB
+      MAX_FILE_SIZE: 1024
+      # Optional PIN protection (leave empty to disable)
+      DUMBDROP_PIN:
+      # Upload without clicking button
+      AUTO_UPLOAD: false
+      # The base URL for the application
+      # You must update this to the url you use to access your site
+      BASE_URL: http://localhost:3000
