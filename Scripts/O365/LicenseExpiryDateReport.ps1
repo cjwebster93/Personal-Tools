@@ -60,7 +60,7 @@ $FriendlyNameHash=@()
 $FriendlyNameHash=Get-Content -Raw -Path .\LicenseFriendlyName.txt -ErrorAction Stop | ConvertFrom-StringData 
 
 #Get available subscriptions in the tenant
-$Subscriptions= Get-MsolSubscription | foreach{
+$Subscriptions= Get-MsolSubscription | ForEach-Object{
  $SubscriptionName=$_.SKUPartNumber
  $SubscribedOn=$_.DateCreated
  $ExpiryDate=$_.NextLifeCycleDate
@@ -184,7 +184,7 @@ if((Test-Path -Path $ExportCSV) -eq "True")
  Write-Host `nOffice 365 license expiry report available in: $ExportCSV -ForegroundColor Green 
  Write-Host `nThe Output file contains $PrintedOutput subscriptions
  $Prompt = New-Object -ComObject wscript.shell 
- $UserInput = $Prompt.popup("Do you want to open output files?",` 
+ $UserInput = $Prompt.popup("Do you want to open output files?",`
  0,"Open Files",4) 
  If ($UserInput -eq 6) 
  { 
