@@ -10,6 +10,14 @@
      Install-Module Microsoft.Online.SharePoint.PowerShell -AllowClobber -AcceptLicense -Force
      Import-Module Microsoft.Online.SharePoint.PowerShell
  }
+
+ Try {
+    Import-Module MSOnline
+} catch {
+    Install-Module MSOnline -AllowClobber -AcceptLicense -Force
+    Import-Module MSOnline
+}
+
  
 
 
@@ -23,15 +31,39 @@ Write-Host ("Collecting SP site URLs...")
 $Sites = Get-SPOSite -Filter {Url -like '*/sites/*'}
 Write-Host ("Done!")
 
+Connect-MsolService
+
 foreach ($site in $Sites) {
     $url = $site.Url -split "/"
     $SiteName = $url[$url.Count-1]
     Write-Host -ForegroundColor Yellow ($SiteName)
-    Get-SPOUser -Site $site.Url  | Select-Object -Property DisplayName,LoginName,UserType,IsSiteAdmin | Export-Csv `
+    
+    Write-Host ("Collecting site members...")
+    $allUsers = Get-SPOUser -Site $site.Url  | Select-Object -Property DisplayName,LoginName,UserType,IsSiteAdmin
+
+    Write-Host ("Filtering for licensed users")
+
+    $filteredUsers = New-Object -TypeName "System.Collections.ArrayList"
+    foreach ($user in $allUsers) {
+        $propUser = Get-MsolUser -UserPrincipalName $user.LoginName | `
+            Select-Object -Property DisplayName,UserPrincipalName,Title,IsLicensed
+
+        If ($propUser.IsLicensed -eq $True) {
+            $filteredUsers += $propUser
+        }
+        
+    }
+
+    $filteredUsers
+    #Export-Csv -InputObject $filteredUsers "$ReportDir\$SiteName.csv" -NoTypeInformation -Force
+    #Out-File -FilePath "$ReportDir\$SiteName.csv" -InputObject $propUser -Force
+    
+    <# Get-SPOUser -Site $site.Url  | Select-Object -Property DisplayName,LoginName,UserType,IsSiteAdmin | Export-Csv `
         "$ReportDir\$SiteName.csv" `
         -NoTypeInformation `
-        -Force
+        -Force #>
 }
 #Disconnect from SPO
 Disconnect-SPOService
+Disconnect-MsolOnline
 Write-Host -ForegroundColor Green ("Reports can be found in $ReportDir")
